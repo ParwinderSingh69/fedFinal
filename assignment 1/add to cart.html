@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Online car Store</title>
+</head>
+<body> CAR SHOP
+</body>
+
+<script> 
+//body background image
+  document.body.style.backgroundImage = "url('https://i.ibb.co/02qmMRN/OIP-11.jpg')";
+  document.body.style.backgroundSize = "cover";
+  document.body.style.backgroundPosition = "right";
+  // Array of item names and corresponding image URLs
+  var items = [
+    { name: "SCORPIO", image:"https://i.ibb.co/vmZ5BKg/OIP-7.jpg" },
+    { name: "THAR", image: "https://i.ibb.co/5Y24j3K/OIP-8.jpg"},
+    { name: "FORTUNER", image:"https://i.ibb.co/2qQgDVB/OIP-9.jpg" },
+    { name: "SWIFT", image: "https://i.ibb.co/zf8rSY1/OIP-10.jpg" }
+  ];
+
+  // Function to create and style an element
+  function createElement(tagName, textContent, styles) {
+    var element = document.createElement(tagName);
+    element.textContent = textContent;
+    if (styles) {
+      Object.assign(element.style, styles);
+    }
+    return element;
+  }
+
+  // Function to add items to the cart
+  var cartItems = [];
+
+  function addToCart(item) {
+    cartItems.push(item);
+    renderCart();
+  }
+
+  // Function to remove item from the cart
+  function removeFromCart(index) {
+    cartItems.splice(index, 1);
+    renderCart();
+  }
+
+  // Function to render cart items
+  function renderCart() {
+    var cartContainer = document.getElementById('cart-items');
+    cartContainer.innerHTML = ''; // Clear previous content
+
+    // Object to store item count
+    var itemCounts = {};
+
+    cartItems.forEach(function(item, index) {
+      // Increment item count 
+      itemCounts[item.name] = (itemCounts[item.name] || 0) + 1;
+
+      var cartItem = createElement('div', '', { marginBottom: '10px', borderBottom: '1px solid #ccc', paddingBottom: '5px', display: 'flex', alignItems: 'right' });
+      var itemImage = createElement('img', '');
+      itemImage.src = item.image;
+      itemImage.style.width = '100px';
+      itemImage.style.height = 'auto';
+      cartItem.appendChild(itemImage);
+      var itemName = createElement('span', item.name, { marginLeft: '10px', flexGrow: '1' });
+      cartItem.appendChild(itemName);
+      var deleteButton = createElement('button', 'Delete', { padding: '5px 10px', backgroundColor: '#dc3545', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer', marginLeft: '10px' });
+      deleteButton.onclick = function() { removeFromCart(index); };
+      cartItem.appendChild(deleteButton);
+
+      // Counter for each item
+      var counter = createElement('span', ' x ' + itemCounts[item.name], { marginLeft: '10px' });
+      cartItem.appendChild(counter);
+
+      cartContainer.appendChild(cartItem);
+    });
+
+    // Update total item count
+    var totalItemCount = Object.values(itemCounts).reduce((acc, count) => acc + count, 0);
+    document.getElementById('total-item-count').textContent = 'Cart (' + totalItemCount + ')';
+  }
+
+  // Creating buttons dynamically
+  var buttonsDiv = document.createElement('div');
+  buttonsDiv.style.float = 'left'; // Align to the left
+  items.forEach(function(item) {
+    var addToCartButton = createElement('button', 'Add to Cart', { padding: '8px 16px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer', marginRight: '10px' });
+    addToCartButton.onclick = function() { addToCart(item); };
+    buttonsDiv.appendChild(addToCartButton);
+    var itemContainer = createElement('div', '', { display: 'flex', alignItems: 'center', marginBottom: '10px' });
+    var itemImage = createElement('img', '');
+    itemImage.src = item.image;
+    itemImage.style.width = '100px';
+    itemImage.style.height = 'auto';
+    itemContainer.appendChild(itemImage);
+    itemContainer.appendChild(createElement('span', item.name, { marginRight: '10px' }));
+    buttonsDiv.appendChild(itemContainer);
+  });
+
+  // Adding total item count and cart items to the document
+  var cartHeader = createElement('div', '', { marginTop: '20px', fontSize: '18px', textAlign: 'right' });
+  var cartItemsContainer = document.createElement('div');
+  cartItemsContainer.id = 'cart-items';
+  document.body.appendChild(cartHeader);
+  document.body.appendChild(cartItemsContainer);
+  document.body.appendChild(buttonsDiv);
+</script>
+
+</body>
+</html>
